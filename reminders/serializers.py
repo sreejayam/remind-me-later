@@ -14,7 +14,7 @@ class ReminderSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
-        # If either date or time is missing (partial update), skip full datetime check
+
         if "date" not in data or "time" not in data:
             return data
 

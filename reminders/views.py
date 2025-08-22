@@ -17,7 +17,7 @@ class ReminderCreateAPIView(APIView):
         if serializer.is_valid():
             try:
                 reminder = ReminderService.create_reminder(serializer.validated_data)
-            except ValueError as e:  # catch service layer rule errors
+            except ValueError as e:
                 return Response(
                     {"message": str(e)},
                     status=status.HTTP_400_BAD_REQUEST
