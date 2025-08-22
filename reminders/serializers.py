@@ -5,7 +5,7 @@ from datetime import datetime
 class ReminderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reminder
-        fields = ["date", "time", "message", "reminder_type"]
+        fields = ["id","date", "time", "message", "reminder_type"]
 
     def validate_date(self, value):
         today = datetime.now().date()
@@ -14,9 +14,14 @@ class ReminderSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
+        # If either date or time is missing (partial update), skip full datetime check
+        if "date" not in data or "time" not in data:
+            return data
+
         reminder_datetime = datetime.combine(data["date"], data["time"])
         if reminder_datetime < datetime.now():
             raise serializers.ValidationError(
                 {"date": "The reminder datetime cannot be in the past."}
             )
         return data
+
